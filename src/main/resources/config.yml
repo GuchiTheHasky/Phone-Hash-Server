@@ -1,0 +1,7 @@
+hashAlgorithm: SHA3-256
+salt: mySecretSalt
+username: admin
+password: password
+numbersPerPrefix: 12500000
+prefixes: [38067, 38068, 38097, 38098]
+
