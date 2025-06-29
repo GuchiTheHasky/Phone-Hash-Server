@@ -20,9 +20,13 @@ public class ConfigLoader {
         }
 
         return new Config.Builder()
+                .serverPort(Integer.parseInt(properties.getProperty("server.port")))
                 .hashAlgorithm(properties.getProperty("hash.algorithm"))
                 .salt(properties.getProperty("salt"))
                 .numbersPerPrefix(Integer.parseInt(properties.getProperty("numbersPerPrefix")))
+                .batchSize(Integer.parseInt(properties.getProperty("batch.size")))
+                .redisHost(properties.getProperty("redis.host"))
+                .redisPort(Integer.parseInt(properties.getProperty("redis.port")))
                 .build();
     }
 }

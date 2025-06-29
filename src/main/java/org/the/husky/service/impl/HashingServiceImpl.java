@@ -18,6 +18,7 @@ public class HashingServiceImpl implements HashingService {
         this.salt = salt;
     }
 
+    @Override
     public String hash(String input) {
         byte[] bytes = digest.digest((input + salt).getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();

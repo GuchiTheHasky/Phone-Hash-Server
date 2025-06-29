@@ -1,52 +1,16 @@
 version: "3.9"
 
 services:
-  redis_067:
+  redis:
     image: redis:7-alpine
-    container_name: redis_067
     ports:
-      - "7001:6379"
-
-  redis_068:
-    image: redis:7-alpine
-    container_name: redis_068
-    ports:
-      - "7002:6379"
-
-  redis_097:
-    image: redis:7-alpine
-    container_name: redis_097
-    ports:
-      - "7003:6379"
-
-  redis_098:
-    image: redis:7-alpine
-    container_name: redis_098
-    ports:
-      - "7004:6379"
-
-  redis_096:
-    image: redis:7-alpine
-    container_name: redis_096
-    ports:
-      - "7005:6379"
-
-  redis_077:
-    image: redis:7-alpine
-    container_name: redis_077
-    ports:
-      - "7006:6379"
+      - "6379:6379"
 
   app:
     build: .
     ports:
       - "8080:8080"
     depends_on:
-      - redis_067
-      - redis_068
-      - redis_097
-      - redis_098
-      - redis_096
-      - redis_077
+      - redis
     environment:
       - JAVA_OPTS=-Xmx1g
