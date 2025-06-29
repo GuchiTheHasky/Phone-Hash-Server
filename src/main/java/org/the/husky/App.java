@@ -1,13 +1,18 @@
 package org.the.husky;
 
 
+import org.the.husky.config.Config;
+import org.the.husky.config.ConfigLoader;
+import org.the.husky.mapper.JsonMapper;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        Config configuration = ConfigLoader.load();
+
         Map<String,RedisNodeClient> clients = Map.of(
                 "38067", new RedisNodeClient("redis://redis1:6379"),
                 "38068", new RedisNodeClient("redis://redis2:6379"),
@@ -16,8 +21,8 @@ public class App {
 
         ExecutorService preloadPool = Executors.newFixedThreadPool(4);
         clients.forEach((prefix,client) -> preloadPool.submit(() -> {
-            PhoneNumberGenerator gen = new PhoneNumberGenerator(prefix, Config.NUMBERS_PER_PREFIX);
-            HashingService hashing = new HashingService(Config.HASH_ALGORITHM, Config.SALT);
+            PhoneNumberGenerator gen = new PhoneNumberGenerator(prefix, configuration.getNumbersPerPrefix());
+            HashingService hashing = new HashingService(configuration.getHashAlgorithm(), configuration.getSalt());
             Map<String,String> batch = new HashMap<>(1024);
             int count=0;
             while(gen.hasNext()){
@@ -30,7 +35,7 @@ public class App {
         preloadPool.shutdown(); preloadPool.awaitTermination(30,TimeUnit.MINUTES);
 
         // start REST API
-        new WebServer(clients,new HashingService(Config.HASH_ALGORITHM,Config.SALT)).start();
-        System.out.println("→ http://localhost:8080 (ready)");
+        new WebServer(clients,new HashingService(configuration.getHashAlgorithm(), configuration.getSalt()), new JsonMapper()).start();
+        System.out.println("SERVICE WORK ON HOST http://localhost:8080 (ready)");
     }
 }

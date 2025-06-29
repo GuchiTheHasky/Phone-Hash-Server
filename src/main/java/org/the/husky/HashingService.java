@@ -8,8 +8,11 @@ public class HashingService {
     private final String salt;
 
     public HashingService(String algorithm, String salt) {
-        try { this.digest = MessageDigest.getInstance(algorithm); }
-        catch (Exception e) { throw new RuntimeException("No such algorithm: " + algorithm); }
+        try {
+            this.digest = MessageDigest.getInstance(algorithm);
+        } catch (Exception e) {
+            throw new RuntimeException("No such algorithm: " + algorithm);
+        }
         this.salt = salt;
     }
 
