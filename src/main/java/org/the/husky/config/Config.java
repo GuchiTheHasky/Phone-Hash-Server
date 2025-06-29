@@ -1,10 +1,6 @@
 package org.the.husky.config;
 
 public class Config {
-//    public static final String HASH_ALGORITHM = "SHA3-256";
-//    public static final String SALT = "mySecretSalt";
-//    public static final int NUMBERS_PER_PREFIX = 12_500_000;
-
     private final String hashAlgorithm;
     private final String salt;
     private final int numbersPerPrefix;

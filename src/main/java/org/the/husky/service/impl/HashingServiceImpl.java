@@ -1,13 +1,15 @@
-package org.the.husky;
+package org.the.husky.service.impl;
+
+import org.the.husky.service.HashingService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
-public class HashingService {
+public class HashingServiceImpl implements HashingService {
     private final MessageDigest digest;
     private final String salt;
 
-    public HashingService(String algorithm, String salt) {
+    public HashingServiceImpl(String algorithm, String salt) {
         try {
             this.digest = MessageDigest.getInstance(algorithm);
         } catch (Exception e) {

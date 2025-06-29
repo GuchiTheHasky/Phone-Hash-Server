@@ -1,6 +1,8 @@
-package org.the.husky;
+package org.the.husky.server;
 
 import io.javalin.Javalin;
+import org.the.husky.service.impl.HashingServiceImpl;
+import org.the.husky.client.RedisNodeClient;
 import org.the.husky.mapper.JsonMapper;
 
 import java.util.List;
@@ -12,12 +14,12 @@ import java.util.concurrent.Future;
 
 public class WebServer {
     private final Map<String, RedisNodeClient> nodes;
-    private final HashingService hashing;
+    private final HashingServiceImpl hashing;
     private final JsonMapper jsonMapper;
 
     private final ExecutorService smallPool = Executors.newFixedThreadPool(4);
 
-    public WebServer(Map<String, RedisNodeClient> nodes, HashingService hashing, JsonMapper jsonMapper) {
+    public WebServer(Map<String, RedisNodeClient> nodes, HashingServiceImpl hashing, JsonMapper jsonMapper) {
         this.nodes = nodes;
         this.hashing = hashing;
         this.jsonMapper = jsonMapper;
@@ -30,12 +32,10 @@ public class WebServer {
         app.get("/hash/{phone}", ctx -> {
             String phone = ctx.pathParam("phone");
             String hash = hashing.hash(phone);                // ★ CHANGED: no Redis needed
-            //String json = "{\"phone\":\"" + phone + "\",\"hash\":\"" + hash + "\"}";
             String json = jsonMapper.toHashJson(hash);
             ctx.result(json).contentType("application/json");
         });
 
-        // /phone/{hash} → parallel GET on 4 nodes
         app.get("/phone/{hash}", ctx -> {
 
             String hash = ctx.pathParam("hash");
@@ -54,7 +54,6 @@ public class WebServer {
             if (phone == null) {
                 ctx.status(404).result("{\"error\":\"Not found\"}").contentType("application/json");
             } else {
-                //String json = "{\"phone\":\"" + phone + "\",\"hash\":\"" + hash + "\"}";
                 String json = jsonMapper.toPhoneJson(phone);
                 ctx.result(json).contentType("application/json");
             }

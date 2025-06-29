@@ -1,6 +1,6 @@
 package org.the.husky.mapper;
 
-public class JsonMapper {
+public class JsonMapper { // todo: rename it
 
     public String toPhoneJson(String phone) {
         return "{\"phone\":\"" + phone + "\"}";
@@ -8,5 +8,9 @@ public class JsonMapper {
 
     public String toHashJson(String hash) {
         return "{\"hash\":\"" + hash + "\"}";
+    }
+
+    public String notFoundJson() {
+        return "{\"error\":\"Not found\"}";
     }
 }

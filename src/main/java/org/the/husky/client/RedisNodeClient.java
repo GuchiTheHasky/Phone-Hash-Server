@@ -1,10 +1,4 @@
-package org.the.husky;
-
-//import org.redisson.Redisson;
-//import org.redisson.api.RBatch;
-//import org.redisson.api.RMap;
-//import org.redisson.api.RedissonClient;
-//import org.redisson.config.Config;
+package org.the.husky.client;
 
 import redis.clients.jedis.Jedis;
 
@@ -12,16 +6,11 @@ import java.util.Map;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Map;
 
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.Map;
 
 public class RedisNodeClient {
     private final JedisPool jedisPool;
