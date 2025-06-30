@@ -41,7 +41,6 @@ public class PreloadServiceImpl implements PreloadService {
 
     private void preloadCode(String code) {
         PhoneNumberGenerator gen = new PhoneNumberGenerator(code, config.getNumbersPerPrefix());
-        //HashingService hashingService = new HashingServiceImpl(config);
 
         Map<String, String> batch = new HashMap<>(config.getBatchSize());
         int count = 0;

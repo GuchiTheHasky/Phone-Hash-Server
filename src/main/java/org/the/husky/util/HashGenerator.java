@@ -19,12 +19,16 @@ public class HashGenerator {
     }
 
     public static String generate(String input) {
-        MessageDigest d = digest.get();
-        d.reset();
-        byte[] bytes = d.digest((input + salt).getBytes(StandardCharsets.UTF_8));
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) sb.append(String.format("%02x", b));
-        return sb.toString();
+        MessageDigest messageDigest = digest.get();
+        messageDigest.reset();
+
+        String inputWithSalt = input + salt;
+        byte[] hashBytes = messageDigest.digest((inputWithSalt).getBytes(StandardCharsets.UTF_8));
+        StringBuilder builder = new StringBuilder();
+        for (byte hashByte : hashBytes) {
+            builder.append(String.format("%02x", hashByte));
+        }
+        return builder.toString();
     }
 }
 
