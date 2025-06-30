@@ -3,6 +3,7 @@ package org.the.husky.service.impl;
 import org.the.husky.client.RedisNodeClient;
 import org.the.husky.config.Config;
 import org.the.husky.service.PreloadService;
+import org.the.husky.util.HashGenerator;
 import org.the.husky.util.PhoneNumberGenerator;
 
 import java.util.HashMap;
@@ -40,21 +41,21 @@ public class PreloadServiceImpl implements PreloadService {
 
     private void preloadCode(String code) {
         PhoneNumberGenerator gen = new PhoneNumberGenerator(code, config.getNumbersPerPrefix());
-        HashingServiceImpl hashing = new HashingServiceImpl(config.getHashAlgorithm(), config.getSalt());
+        //HashingService hashingService = new HashingServiceImpl(config);
 
         Map<String, String> batch = new HashMap<>(config.getBatchSize());
         int count = 0;
 
         while (gen.hasNext()) {
             String phone = gen.next();
-            String hash = hashing.hash(phone);
+            String hash = HashGenerator.generate(phone);
             batch.put(phone, hash);
             if (batch.size() == config.getBatchSize()) {
                 client.putBatch(batch);
                 batch.clear();
             }
             if (++count % 500_000 == 0) {
-                logger.info("code: %s count: %s processed".formatted(code, count));
+                logger.info("code: %s processed: %s thread: %s".formatted(code, count, Thread.currentThread().getName()));
             }
         }
 

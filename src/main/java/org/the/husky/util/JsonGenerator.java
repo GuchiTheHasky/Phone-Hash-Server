@@ -13,6 +13,10 @@ public class JsonGenerator {
         return "{\"error\": \"Not found\"}";
     }
 
+    public static String notAuthorizedResponse() {
+        return "{\"error\": \"Not authorized\"}";
+    }
+
     private static String generatePhoneJson(String phone) {
         return "{\"phone\":\"" + phone + "\"}";
     }

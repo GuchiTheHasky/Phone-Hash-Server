@@ -5,10 +5,8 @@ import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 
-
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
-
 
 public class RedisNodeClient {
     private final JedisPool jedisPool;

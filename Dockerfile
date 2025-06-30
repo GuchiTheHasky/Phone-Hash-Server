@@ -1,7 +1,7 @@
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
-COPY target/PhoneHashServer-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
+COPY target/PhoneHashServer-1.0-jar-with-dependencies.jar app.jar
 
 ENTRYPOINT ["/bin/bash", "-c", "\
   until echo > /dev/tcp/redis/6379; do \

@@ -27,6 +27,8 @@ public class ConfigLoader {
                 .batchSize(Integer.parseInt(properties.getProperty("batch.size")))
                 .redisHost(properties.getProperty("redis.host"))
                 .redisPort(Integer.parseInt(properties.getProperty("redis.port")))
+                .userName(properties.getProperty("user.name"))
+                .password(properties.getProperty("password"))
                 .build();
     }
 }

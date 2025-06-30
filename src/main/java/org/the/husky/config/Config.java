@@ -8,6 +8,8 @@ public class Config {
     private final int batchSize;
     private final String redisHost;
     private final int redisPort;
+    private final String username;
+    private final String password;
 
     private Config(Builder builder) {
         this.serverPort = builder.serverPort;
@@ -17,6 +19,8 @@ public class Config {
         this.batchSize = builder.batchSize;
         this.redisHost = builder.redisHost;
         this.redisPort = builder.redisPort;
+        this.username = builder.username;
+        this.password = builder.password;
     }
 
     public int getBatchSize() {
@@ -47,6 +51,14 @@ public class Config {
         return redisPort;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
     public static class Builder {
         private int serverPort;
         private String hashAlgorithm;
@@ -55,6 +67,18 @@ public class Config {
         private int batchSize;
         private String redisHost;
         private int redisPort;
+        private String username;
+        private String password;
+
+        public Builder userName(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
 
         public Builder serverPort(int serverPort) {
             this.serverPort = serverPort;
