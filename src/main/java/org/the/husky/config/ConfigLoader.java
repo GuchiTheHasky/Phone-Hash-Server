@@ -1,6 +1,7 @@
 package org.the.husky.config;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -29,6 +30,8 @@ public class ConfigLoader {
                 .redisPort(Integer.parseInt(properties.getProperty("redis.port")))
                 .userName(properties.getProperty("user.name"))
                 .password(properties.getProperty("password"))
+                .poolSize(Integer.parseInt(properties.getProperty("pool.size")))
+                .codes(Arrays.asList(properties.getProperty("phone.codes").split(",")))
                 .build();
     }
 }

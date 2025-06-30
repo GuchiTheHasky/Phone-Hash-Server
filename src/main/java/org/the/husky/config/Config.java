@@ -1,5 +1,7 @@
 package org.the.husky.config;
 
+import java.util.List;
+
 public class Config {
     private final int serverPort;
     private final String hashAlgorithm;
@@ -10,6 +12,8 @@ public class Config {
     private final int redisPort;
     private final String username;
     private final String password;
+    private final int poolSize;
+    private final List<String> codes;
 
     private Config(Builder builder) {
         this.serverPort = builder.serverPort;
@@ -21,6 +25,8 @@ public class Config {
         this.redisPort = builder.redisPort;
         this.username = builder.username;
         this.password = builder.password;
+        this.poolSize = builder.poolSize;
+        this.codes = builder.codes;
     }
 
     public int getBatchSize() {
@@ -59,6 +65,14 @@ public class Config {
         return password;
     }
 
+    public int getPoolSize() {
+        return poolSize;
+    }
+
+    public List<String> getCodes() {
+        return codes;
+    }
+
     public static class Builder {
         private int serverPort;
         private String hashAlgorithm;
@@ -69,6 +83,8 @@ public class Config {
         private int redisPort;
         private String username;
         private String password;
+        private int poolSize;
+        private List<String> codes;
 
         public Builder userName(String username) {
             this.username = username;
@@ -112,6 +128,16 @@ public class Config {
 
         public Builder redisPort(int redisPort) {
             this.redisPort = redisPort;
+            return this;
+        }
+
+        public Builder poolSize(int poolSize) {
+            this.poolSize = poolSize;
+            return this;
+        }
+
+        public Builder codes(List<String> codes) {
+            this.codes = codes;
             return this;
         }
 

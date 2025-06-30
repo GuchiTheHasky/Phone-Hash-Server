@@ -1,15 +1,24 @@
 package org.the.husky.server;
 
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import org.the.husky.config.Config;
 import org.the.husky.client.RedisNodeClient;
 import org.the.husky.util.HashGenerator;
-import org.the.husky.util.JsonGenerator;
 
-import static org.the.husky.constant.Constants.APPLICATION_JSON;
+import java.util.Base64;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class WebServer {
+    private static final Logger logger = Logger.getLogger(WebServer.class.getName());
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String AUTH_TOKEN_PREFIX = "Basic ";
+    private static final String UNAUTHORIZED = "Unauthorized";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String ERROR = "Error";
+
     private final RedisNodeClient node;
     private final Config config;
 
@@ -21,53 +30,56 @@ public class WebServer {
     public void start() {
         Javalin app = Javalin.create().start(config.getServerPort());
 
-        app.post("/auth", ctx -> {
-            String username = config.getUsername();
-            String password = config.getPassword();
-            String token = HashGenerator.generate(username + ":" + password);
-            ctx.result(JsonGenerator.successResponse(token)).contentType(APPLICATION_JSON);
-        });
+        app.get("/hash", context -> {
 
-        app.get("/hash/{phone}", ctx -> {
-
-            if (isNotAuthorised(ctx)) {
-                String json = JsonGenerator.notAuthorizedResponse();
-                ctx.status(401).result(json).contentType(APPLICATION_JSON);
+            String auth = context.header(AUTH_HEADER);
+            if (isNotAuthorized(auth)) {
+                context.status(401)
+                        .contentType(APPLICATION_JSON)
+                        .json(Map.of(ERROR, UNAUTHORIZED));
                 return;
             }
 
-            String phone = ctx.pathParam("phone");
+            String phone = context.queryParam("phone");
             String hash = HashGenerator.generate(phone);
-            String json = JsonGenerator.successResponse(hash);
-            ctx.result(json).contentType(APPLICATION_JSON);
+            context.status(200)
+                    .contentType(APPLICATION_JSON)
+                    .json(Map.of("hash", hash));
         });
 
-        app.get("/phone/{hash}", ctx -> {
+        app.get("/phone", context -> {
 
-            if (isNotAuthorised(ctx)) {
-                String json = JsonGenerator.notAuthorizedResponse();
-                ctx.status(401).result(json).contentType(APPLICATION_JSON);
+            String auth = context.header(AUTH_HEADER);
+            if (isNotAuthorized(auth)) {
+                context.status(401)
+                        .contentType(APPLICATION_JSON)
+                        .json(Map.of(ERROR, UNAUTHORIZED));
                 return;
             }
 
-            String hash = ctx.pathParam("hash");
+            String hash = context.queryParam("hash");
             String phone = node.findPhoneByHash(hash);
 
-            if (phone == null) {
-                ctx.status(404).result(JsonGenerator.errorResponse()).contentType(APPLICATION_JSON);
-            } else {
-                String json = JsonGenerator.successResponse(phone);
-                ctx.result(json).contentType(APPLICATION_JSON);
-            }
-
+            context.status(200)
+                    .contentType(APPLICATION_JSON)
+                    .json(Map.of("phone", phone));
         });
     }
 
-    private boolean isNotAuthorised(Context ctx) {
-        String header = ctx.header("Authorization");
-        String expectedToken = HashGenerator.generate(config.getUsername() + ":" + config.getPassword());
+    private boolean isNotAuthorized(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith(AUTH_TOKEN_PREFIX)) {
+            return true;
+        }
 
-        return header == null || !header.equals(expectedToken);
+        try {
+            String base64Credentials = authHeader.substring(AUTH_TOKEN_PREFIX.length()).trim();
+            byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
+            String decoded = new String(decodedBytes);
+            String expected = config.getUsername() + ":" + config.getPassword();
+            return !decoded.equals(expected);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Failed to decode Authorization header", e);
+            return true;
+        }
     }
 }
-

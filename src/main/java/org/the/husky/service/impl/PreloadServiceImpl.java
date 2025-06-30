@@ -14,12 +14,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static org.the.husky.constant.Constants.*;
 
 public class PreloadServiceImpl implements PreloadService {
+    private static final Logger logger = Logger.getLogger(PreloadServiceImpl.class.getName());
+
     private final RedisNodeClient client;
     private final Config config;
-    private final Logger logger = Logger.getLogger(PreloadServiceImpl.class.getName());
 
     public PreloadServiceImpl(RedisNodeClient client, Config config) {
         this.client = client;
@@ -28,8 +28,8 @@ public class PreloadServiceImpl implements PreloadService {
 
     @Override
     public void preload() throws InterruptedException {
-        List<String> phoneCodes = List.of(CODE_067, CODE_068, CODE_077, CODE_096, CODE_097, CODE_098);
-        ExecutorService pool = Executors.newFixedThreadPool(phoneCodes.size());
+        List<String> phoneCodes = config.getCodes();
+        ExecutorService pool = Executors.newFixedThreadPool(config.getPoolSize());
 
         for (String code : phoneCodes) {
             pool.submit(() -> preloadCode(code));
