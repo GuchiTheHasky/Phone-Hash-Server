@@ -1,4 +1,4 @@
-package org.the.husky.server;
+package org.the.husky.web;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,10 +23,13 @@ class WebServerTest {
     private static final int PORT = 7070;
 
     private static RedisNodeClient redisClient;
+    private static RequestValidator requestValidator;
+
 
     @BeforeAll
     static void startServer() throws InterruptedException, ExecutionException, TimeoutException {
         Config config = mock(Config.class);
+        requestValidator = mock(RequestValidator.class);
         redisClient = mock(RedisNodeClient.class);
 
         when(config.getUsername()).thenReturn("Guchi");
@@ -37,7 +40,7 @@ class WebServerTest {
 
         HashGenerator.init(config);
 
-        WebServer server = new WebServer(redisClient, config);
+        WebServer server = new WebServer(redisClient, requestValidator, config);
 
         Future<?> future = executor.submit(server::start);
         future.get(5, TimeUnit.SECONDS);
@@ -68,6 +71,8 @@ class WebServerTest {
     void shouldReturnUnauthorized_whenNoAuthHeader() throws Exception {
         URL url = new URL("http://localhost:" + PORT + "/hash?phone=" + PHONE);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        when(requestValidator.isNotAuthorized(null)).thenReturn(true);
 
         assertEquals(401, connection.getResponseCode());
 
