@@ -18,7 +18,6 @@ public class App {
 
         RedisNodeClient redisClient = new RedisNodeClient(config);
 
-        //HashingService hashingService = new HashingServiceImpl(config);
         PreloadService preloadService = new PreloadServiceImpl(redisClient, config);
         preloadService.preload();
 

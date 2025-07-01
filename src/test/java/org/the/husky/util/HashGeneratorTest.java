@@ -11,11 +11,11 @@ public class HashGeneratorTest {
 
     @BeforeAll
     static void setup() {
-        HashGenerator.init("SHA3-256", "testSalt");
+        HashGenerator.init("SHA3-256", "theHuskySalt");
     }
 
     @Test
-    void shouldGenerateSameHashForSameInput() {
+    void shouldGenerateSameHashForSamePhoneNumbers() {
         String input = "380671231231";
         String hash1 = HashGenerator.generate(input);
         String hash2 = HashGenerator.generate(input);
@@ -24,7 +24,7 @@ public class HashGeneratorTest {
     }
 
     @Test
-    void shouldGenerateDifferentHashesForDifferentInputs() {
+    void shouldGenerateDifferentHashesForDifferentPhoneNumbers() {
         String hash1 = HashGenerator.generate("380671231231");
         String hash2 = HashGenerator.generate("380971231231");
 
@@ -36,7 +36,6 @@ public class HashGeneratorTest {
         String input = "380671231231";
         String hash1 = HashGenerator.generate(input);
 
-        // Перевизначаємо сіль
         HashGenerator.init("SHA3-256", "anotherSalt");
         String hash2 = HashGenerator.generate(input);
 

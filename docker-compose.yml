@@ -14,3 +14,9 @@ services:
       - redis
     environment:
       - JAVA_OPTS=-Xmx1g
+
+  tests:
+    build:
+      context: .
+      target: tests
+    command: mvn test

@@ -17,6 +17,7 @@
     <jedis.version>5.1.0</jedis.version>
     <junit.version>5.13.0</junit.version>
     <mockito.version>5.12.0</mockito.version>
+    <surefire-plugin.version>3.0.0-M9</surefire-plugin.version>
     <assembly-plugin.version>3.5.0</assembly-plugin.version>
   </properties>
 
@@ -71,6 +72,12 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+      </plugin>
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>${assembly-plugin.version}</version>
