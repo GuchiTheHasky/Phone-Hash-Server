@@ -2,11 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.the.husky</groupId>
-  <artifactId>PhoneHashServer</artifactId>
+  <artifactId>phone-hash-server</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
-  <name>PhoneHashServer</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
