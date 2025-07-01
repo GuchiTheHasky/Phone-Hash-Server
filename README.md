@@ -54,6 +54,6 @@ docker compose up app redis
 
 # JMeter
 
-![img.png](jmeter_report.png)
+![img.png](jmeter/jmeter_report.png)
 
-![img.png](time_grauph.png)
+![img.png](jmeter/time_grauph.png)
