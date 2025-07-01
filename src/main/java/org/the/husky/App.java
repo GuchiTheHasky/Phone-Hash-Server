@@ -13,8 +13,7 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         Config config = ConfigLoader.load();
-        HashGenerator.init(config.getHashAlgorithm(), config.getSalt());
-
+        HashGenerator.init(config);
 
         RedisNodeClient redisClient = new RedisNodeClient(config);
 

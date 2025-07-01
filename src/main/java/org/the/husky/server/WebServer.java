@@ -1,6 +1,7 @@
 package org.the.husky.server;
 
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import org.the.husky.config.Config;
 import org.the.husky.client.RedisNodeClient;
 import org.the.husky.util.HashGenerator;
@@ -30,23 +31,16 @@ public class WebServer {
     public void start() {
         Javalin app = Javalin.create().start(config.getServerPort());
 
-        app.get("/hash", context -> {
+        getHashByPhoneNumber(app);
+        getPhoneByHash(app);
+        healthCheck(app);
+    }
 
-            String auth = context.header(AUTH_HEADER);
-            if (isNotAuthorized(auth)) {
-                context.status(401)
-                        .contentType(APPLICATION_JSON)
-                        .json(Map.of(ERROR, UNAUTHORIZED));
-                return;
-            }
+    private void healthCheck(Javalin app) {
+        app.get("/health", ctx -> ctx.result("OK"));
+    }
 
-            String phone = context.queryParam("phone");
-            String hash = HashGenerator.generate(phone);
-            context.status(200)
-                    .contentType(APPLICATION_JSON)
-                    .json(Map.of("hash", hash));
-        });
-
+    private void getPhoneByHash(Javalin app) {
         app.get("/phone", context -> {
 
             String auth = context.header(AUTH_HEADER);
@@ -63,6 +57,25 @@ public class WebServer {
             context.status(200)
                     .contentType(APPLICATION_JSON)
                     .json(Map.of("phone", phone));
+        });
+    }
+
+    private void getHashByPhoneNumber(Javalin app) {
+        app.get("/hash", context -> {
+
+            String auth = context.header(AUTH_HEADER);
+            if (isNotAuthorized(auth)) {
+                context.status(401)
+                        .contentType(APPLICATION_JSON)
+                        .json(Map.of(ERROR, UNAUTHORIZED));
+                return;
+            }
+
+            String phone = context.queryParam("phone");
+            String hash = HashGenerator.generate(phone);
+            context.status(200)
+                    .contentType(APPLICATION_JSON)
+                    .json(Map.of("hash", hash));
         });
     }
 

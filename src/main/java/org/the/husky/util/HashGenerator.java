@@ -1,5 +1,7 @@
 package org.the.husky.util;
 
+import org.the.husky.config.Config;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -7,13 +9,13 @@ public class HashGenerator {
     private static String salt;
     private static ThreadLocal<MessageDigest> digest;
 
-    public static void init(String algorithm, String inputSalt) {
-        salt = inputSalt;
+    public static void init(Config config) {
+        salt = config.getSalt();
         digest = ThreadLocal.withInitial(() -> {
             try {
-                return MessageDigest.getInstance(algorithm);
+                return MessageDigest.getInstance(config.getHashAlgorithm());
             } catch (Exception e) {
-                throw new RuntimeException("Unsupported hash algorithm: " + algorithm, e);
+                throw new RuntimeException("Unsupported hash algorithm: " + config.getHashAlgorithm(), e);
             }
         });
     }

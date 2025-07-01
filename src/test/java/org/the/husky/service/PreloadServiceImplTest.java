@@ -27,8 +27,10 @@ public class PreloadServiceImplTest {
         when(config.getNumbersPerPrefix()).thenReturn(2_000);
         when(config.getBatchSize()).thenReturn(1000);
         when(config.getPoolSize()).thenReturn(2);
+        when(config.getHashAlgorithm()).thenReturn("SHA3-256");
+        when(config.getSalt()).thenReturn("testSalt");
 
-        HashGenerator.init("SHA3-256", "testSalt");
+        HashGenerator.init(config);
     }
 
     @Test

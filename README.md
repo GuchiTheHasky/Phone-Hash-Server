@@ -21,7 +21,7 @@
 - Для запуску тестів:
 
 ```bash
-docker compose run --rm tests
+docker compose run tests
 ```
 
 # Запуск
@@ -29,5 +29,5 @@ docker compose run --rm tests
 - Для запуску застосунку
 
 ```bash
-docker compose up --build
+docker compose up app redis
 ```

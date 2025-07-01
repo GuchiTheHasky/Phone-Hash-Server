@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PhoneNumberGeneratorTest {
 
-
     @Test
     void shouldGenerateCorrectPhoneNumberFormat() {
         PhoneNumberGenerator generator = new PhoneNumberGenerator("38067", 11);

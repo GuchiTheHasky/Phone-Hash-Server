@@ -31,9 +31,11 @@ class WebServerTest {
 
         when(config.getUsername()).thenReturn("Guchi");
         when(config.getPassword()).thenReturn("TheHusky");
+        when(config.getHashAlgorithm()).thenReturn("SHA-256");
+        when(config.getSalt()).thenReturn("theHuskySalt");
         when(config.getServerPort()).thenReturn(PORT);
 
-        HashGenerator.init("SHA-256", "theHuskySalt");
+        HashGenerator.init(config);
 
         WebServer server = new WebServer(redisClient, config);
 

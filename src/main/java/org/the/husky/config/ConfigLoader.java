@@ -3,6 +3,7 @@ package org.the.husky.config;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConfigLoader {
@@ -17,7 +18,7 @@ public class ConfigLoader {
             logger.info("Loaded application properties");
 
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            logger.log(Level.WARNING, "Fail to load application properties", e);
         }
 
         return new Config.Builder()
